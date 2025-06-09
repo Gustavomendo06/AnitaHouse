@@ -43,5 +43,17 @@ app.post('/api/checkin', (req, res) => {
   });
 });
 
+app.get("/listar", (req, res) => {
+  try {
+    const stmt = db.prepare("SELECT * FROM hospedes");
+    const dados = stmt.all();
+    res.json(dados);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Erro ao obter os dados");
+  }
+});
+
+
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`Servidor a correr em http://localhost:${PORT}`));
