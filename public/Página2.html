@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Paginas.css">
+    <link rel="icon" type="image/x-icon" href="imagens/favicon.ico" >
+    <link  href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <title>AnitaHouse</title>
+</head>
+<body>
+    <img src="imagens/IMG_2634-removebg-preview.png" alt="house" class="logo">
+
+    <div class="container"> 
+        <h1>Check-in</h1>
+
+       <form id="pagina2Form">
+  <div class="input-box">
+    <input  id="documentType" placeholder="Type of Document (Passport, Citizen Card, other)" required>
+  </div>
+
+  <div class="input-box">
+    <input type="text" id="documentNumber" placeholder="Document number" required>
+  </div>
+
+  <div class="input-box">
+    <input type="text" id="documentIssuer" placeholder="Parent issuing the document" required>
+  </div>
+
+  <div class="input-box">
+    <input type="text" id="checkinDate" placeholder="Check-in date" required>
+  </div>
+
+  <div class="input-box">
+    <input type="text" id="checkoutDate" placeholder="Check-out date" required>
+  </div>
+
+  <div class="button-group">
+    <div>
+      <a href="pagina1.html"><button type="button" class="button">Before</button></a>
+    </div>
+
+    <div>
+      <button type="submit" class="button" id="submitBtn">Submit</button>
+    </div>
+  </div>
+</form>
+
+
+  <script>
+  document.querySelector('#pagina2Form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    // Validações simples
+    const documentType = document.getElementById('documentType').value.trim();
+    const documentNumber = document.getElementById('documentNumber').value.trim();
+    const documentIssuer = document.getElementById('documentIssuer').value.trim();
+    const checkinDate = document.getElementById('checkinDate').value.trim();
+    const checkoutDate = document.getElementById('checkoutDate').value.trim();
+
+    if (!documentType || !documentNumber || !documentIssuer || !checkinDate || !checkoutDate) {
+      alert("Por favor, preencha todos os campos.");
+      return;
+    }
+
+    if (new Date(checkinDate) > new Date(checkoutDate)) {
+      alert("A data de check-out deve ser posterior à data de check-in.");
+      return;
+    }
+
+    const data = {
+      name: localStorage.getItem('name'),
+      birthDate: localStorage.getItem('birthDate'),
+      birthPlace: localStorage.getItem('birthPlace'),
+      nationality: localStorage.getItem('nationality'),
+      residencePlace: localStorage.getItem('residencePlace'),
+      residenceCountry: localStorage.getItem('residenceCountry'),
+      documentType: documentType,
+      documentNumber: documentNumber,
+      documentIssuer: documentIssuer,
+      checkinDate: checkinDate,
+      checkoutDate: checkoutDate
+};
+
+
+    console.log("Dados enviados ao backend:", data);
+
+    try {
+      const response = await fetch('http://localhost:3000/api/checkin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert(result.message);
+        // Redireciona ou limpa campos
+        // window.location.href = 'pagina1.html';
+      } else {
+        alert("Erro: " + result.message);
+      }
+    } catch (error) {
+      alert("Erro ao conectar com o servidor.");
+      console.error(error);
+    }
+  });
+</script>
+
+</body>
+</html> 

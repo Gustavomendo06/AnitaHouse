@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="Paginas.css" />
+    <link rel="icon" type="image/x-icon" href="imagens/favicon.ico" />
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <title>AnitaHouse</title>
+</head>
+<body>
+    <img src="imagens/IMG_2634-removebg-preview.png" alt="house" class="logo" />
+
+    <div class="container">
+        <h1>Check-in</h1>
+
+        <form id="pagina1Form" onsubmit="return validarFormulario()">
+            <div class="input-box">
+                <input id="name" type="text" placeholder="Name" required />
+            </div>
+
+            <div class="input-box">
+                <input id="birthDate" type="text" placeholder="Date of birth" required />
+            </div>
+
+            <div class="input-box">
+                <input id="birthPlace" type="text" placeholder="Place of birth" required />
+            </div>
+
+            <div class="input-box">
+                <input id="nationality" type="text" placeholder="Nationality" required />
+            </div>
+
+            <div class="input-box">
+                <input id="residencePlace" type="text" placeholder="Place of residence" required />
+            </div>
+
+            <div class="input-box">
+                <input id="residenceCountry" type="text" placeholder="Country of Residence" required />
+            </div>
+
+            <div class="button-group">
+                <div>
+                    <a href="index.html"><button type="button" class="button">Before</button></a>
+                </div>
+
+                <div>
+                    <button type="submit" class="button">Next</button>
+
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+  function validarFormulario() {
+    const nome = document.getElementById('name').value.trim();
+    const nascimento = document.getElementById('birthDate').value.trim();
+    const localNascimento = document.getElementById('birthPlace').value.trim();
+    const nacionalidade = document.getElementById('nationality').value.trim();
+    const residencia = document.getElementById('residencePlace').value.trim();
+    const pais = document.getElementById('residenceCountry').value.trim();
+
+    if (!nome || !nascimento || !localNascimento || !nacionalidade || !residencia || !pais) {
+      alert("Por favor, preencha todos os campos.");
+      return false;
+    }
+
+    // Salva os dados no localStorage
+    localStorage.setItem('name', nome);
+    localStorage.setItem('birthDate', nascimento);
+    localStorage.setItem('birthPlace', localNascimento);
+    localStorage.setItem('nationality', nacionalidade);
+    localStorage.setItem('residencePlace', residencia);
+    localStorage.setItem('residenceCountry', pais);
+
+    // Redireciona para página 2
+    window.location.href = "Página2.html";
+
+    return false;
+  }
+</script>
+
+</body>
+</html>

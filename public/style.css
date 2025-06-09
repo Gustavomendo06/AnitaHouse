@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Edu+SA+Hand:wght@400..700&display=swap');
+
+/*cdbb4d -> Cor das letras
+*/ 
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family:"Edu SA Hand", cursive ;
+}
+body{
+    display: flex;
+    justify-content: center ;
+    align-items: center;
+    min-height: 100vh;
+   /* background:#3e403d ; */
+    background-image: url(imagens/blob-scene-haikei.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+.container {
+    width: 430px;
+    background: #3e403d;
+    color: #fff;
+    border-radius: 10%;
+    padding-bottom: 30px;
+    /*box-shadow: 0 0 25px #cdbb4d; */
+}
+
+.container h1{
+    font-size: 36px;
+    text-align: center;
+
+}
+
+.container p{
+    text-align: center;
+    font-size: 30px ;
+}
+
+.container img{
+    height: 300px;
+    align-items:  center;
+    display: block;
+    margin: 0 auto;
+    width: 300px;
+    margin-top: -30px;
+}
+
+.container a {
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.container button{
+    /*color: #d2c76b; */
+    font-size: 20px;
+    width: 50%;
+    height: 45px;
+    background:#fff;
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    box-shadow: 0 0 10px;
+    cursor: pointer;
+    color: #3e403d;
+    font-weight: 600;
+    margin-top: -20px; 
+}
