@@ -1,9 +1,16 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-const Database = require('better-sqlite3'); // importa a lib
-const db = new Database('anitaHouse.db', { verbose: console.log }); // cria/abre banco
+const sqlite3 = require('sqlite3').verbose(); // usamos sqlite3 em vez de better-sqlite3
 const bodyParser = require('body-parser');
+
+const db = new sqlite3.Database('anitaHouse.db', (err) => {
+  if (err) {
+    console.error('Erro ao abrir a base de dados:', err.message);
+  } else {
+    console.log('Base de dados conectada com sucesso.');
+  }
+});
 
 app.use(bodyParser.json());
 
@@ -24,37 +31,39 @@ app.post('/checkin', (req, res) => {
     checkinDate, checkoutDate
   } = req.body;
 
-  try {
-    const stmt = db.prepare(`
-      INSERT INTO Hospedes (
-        Nome, DataNascimento, LocalNascimento, Nacionalidade,
-        LocalResidencia, PaisResidencia, TipoDocumento, NumeroDocumento,
-        PaisEmissor, DataCheckin, DataCheckout
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `);
-    stmt.run(
-      name, birthDate, birthPlace, nationality,
-      residencePlace, residenceCountry,
-      documentType, documentNumber, documentIssuer,
-      checkinDate, checkoutDate
-    );
+  const query = `
+    INSERT INTO Hospedes (
+      Nome, DataNascimento, LocalNascimento, Nacionalidade,
+      LocalResidencia, PaisResidencia, TipoDocumento, NumeroDocumento,
+      PaisEmissor, DataCheckin, DataCheckout
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
 
-    res.status(200).json({ message: 'Check-in guardado com sucesso!' });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Erro ao guardar check-in' });
-  }
+  db.run(query, [
+    name, birthDate, birthPlace, nationality,
+    residencePlace, residenceCountry,
+    documentType, documentNumber, documentIssuer,
+    checkinDate, checkoutDate
+  ], function(err) {
+    if (err) {
+      console.error('Erro ao inserir no banco de dados:', err.message);
+      res.status(500).json({ message: 'Erro ao guardar check-in' });
+    } else {
+      res.status(200).json({ message: 'Check-in guardado com sucesso!' });
+    }
+  });
 });
 
+// Rota para listar hóspedes
 app.get("/listar", (req, res) => {
-  try {
-    const stmt = db.prepare("SELECT * FROM Hospedes"); // atenção ao nome da tabela
-    const dados = stmt.all();
-    res.json(dados);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Erro ao obter os dados");
-  }
+  db.all("SELECT * FROM Hospedes", [], (err, rows) => {
+    if (err) {
+      console.error("Erro ao buscar dados:", err.message);
+      res.status(500).send("Erro ao obter os dados");
+    } else {
+      res.json(rows);
+    }
+  });
 });
 
 const PORT = process.env.PORT || 10000;
